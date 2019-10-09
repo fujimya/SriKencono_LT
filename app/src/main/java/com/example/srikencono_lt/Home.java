@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,12 +36,19 @@ public class Home extends Fragment {
     private ArrayList<String> urlGambar = new ArrayList<>();
     private ArrayList<String> title = new ArrayList<>();
     private ArrayList<String> subtitle = new ArrayList<>();
+    private ArrayList<String> kategori = new ArrayList<>();
+
+    private ArrayList<String> FurlGambar = new ArrayList<>();
+    private ArrayList<String> Ftitle = new ArrayList<>();
+    private ArrayList<String> Fsubtitle = new ArrayList<>();
+    private ArrayList<String> FKategori = new ArrayList<>();
 
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     TextView textView;
     ImageView imge;
+    Button pkk,ktaruna,desa;
 
     public Home() {
         // Required empty public constructor
@@ -51,6 +59,10 @@ public class Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
+        pkk = view.findViewById(R.id.pkk);
+        ktaruna = view.findViewById(R.id.ktaruna);
+        desa = view.findViewById(R.id.desa);
+
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("kegiatan");
@@ -58,6 +70,7 @@ public class Home extends Fragment {
 
         imge = view.findViewById(R.id.img);
         textView = view.findViewById(R.id.keterangan);
+
 
         refgambar.addValueEventListener(new ValueEventListener() {
             @Override
@@ -90,6 +103,7 @@ public class Home extends Fragment {
                     urlGambar.add(child.child("url").getValue().toString());
                     title.add(child.child("title").getValue().toString());
                     subtitle.add(child.child("isi").getValue().toString());
+                    kategori.add(child.child("kategori").getValue().toString());
                 }
                 if (urlGambar.isEmpty()) {
                     rvView.setVisibility(View.GONE);
@@ -108,6 +122,8 @@ public class Home extends Fragment {
             }
         });
 
+
+
         rvView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
         adapter = new AdapterFoto(view.getContext(),urlGambar,title,subtitle);
 
@@ -119,6 +135,68 @@ public class Home extends Fragment {
             rvView.setVisibility(View.VISIBLE);
             textView.setVisibility(View.GONE);
         }
+
+
+        pkk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FurlGambar.clear();
+                Ftitle.clear();
+                Fsubtitle.clear();
+                FKategori.clear();
+                for(int a=0; a < kategori.size(); a++){
+                    if(kategori.get(a).toString().equals("pkk")){
+                        FurlGambar.add(urlGambar.get(a).toString());
+                        Ftitle.add(title.get(a).toString());
+                        Fsubtitle.add(subtitle.get(a).toString());
+                        FKategori.add(kategori.get(a).toString());
+                    }
+                }
+                adapter = new AdapterFoto(view.getContext(),FurlGambar,Ftitle,Fsubtitle);
+                rvView.setAdapter(adapter);
+            }
+        });
+
+        ktaruna.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FurlGambar.clear();
+                Ftitle.clear();
+                Fsubtitle.clear();
+                FKategori.clear();
+                for(int a=0; a < kategori.size(); a++){
+                    if(kategori.get(a).toString().equals("taruna")){
+                        FurlGambar.add(urlGambar.get(a).toString());
+                        Ftitle.add(title.get(a).toString());
+                        Fsubtitle.add(subtitle.get(a).toString());
+                        FKategori.add(kategori.get(a).toString());
+                    }
+                }
+                adapter = new AdapterFoto(view.getContext(),FurlGambar,Ftitle,Fsubtitle);
+                rvView.setAdapter(adapter);
+
+            }
+        });
+
+        desa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FurlGambar.clear();
+                Ftitle.clear();
+                Fsubtitle.clear();
+                FKategori.clear();
+                for(int a=0; a < kategori.size(); a++){
+                    if(kategori.get(a).toString().equals("desa")){
+                        FurlGambar.add(urlGambar.get(a).toString());
+                        Ftitle.add(title.get(a).toString());
+                        Fsubtitle.add(subtitle.get(a).toString());
+                        FKategori.add(kategori.get(a).toString());
+                    }
+                }
+                adapter = new AdapterFoto(view.getContext(),FurlGambar,Ftitle,Fsubtitle);
+                rvView.setAdapter(adapter);
+            }
+        });
         rvView.setAdapter(adapter);
         // Inflate the layout for this fragment
 
